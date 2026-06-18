@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.employee.mapper.SysEmployeeMapper">
+    
+    <resultMap type="SysEmployee" id="SysEmployeeResult">
+        <result property="employeeId"    column="employee_id"    />
+        <result property="deptId"    column="dept_id"    />
+        <result property="employeeName"    column="employee_name"    />
+        <result property="phone"    column="phone"    />
+        <result property="email"    column="email"    />
+        <result property="post"    column="post"    />
+        <result property="salary"    column="salary"    />
+        <result property="entryDate"    column="entry_date"    />
+        <result property="status"    column="status"    />
+        <result property="avatar"    column="avatar"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectSysEmployeeVo">
+        select employee_id, dept_id, employee_name, phone, email, post, salary, entry_date, status, avatar, create_by, create_time, update_by, update_time, remark from sys_employee e
+    </sql>
+
+    <select id="selectSysEmployeeList" parameterType="SysEmployee" resultMap="SysEmployeeResult">
+        <include refid="selectSysEmployeeVo"/>
+        <where>  
+            <if test="deptId != null "> and dept_id = #{deptId}</if>
+            <if test="employeeName != null  and employeeName != ''"> and employee_name like concat('%', #{employeeName}, '%')</if>
+            <if test="phone != null  and phone != ''"> and phone = #{phone}</if>
+            <if test="email != null  and email != ''"> and email = #{email}</if>
+            <if test="post != null  and post != ''"> and post = #{post}</if>
+            <if test="salary != null "> and salary = #{salary}</if>
+            <if test="entryDate != null "> and entry_date = #{entryDate}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="avatar != null  and avatar != ''"> and avatar = #{avatar}</if>
+            ${params.dataScope}
+        </where>
+    </select>
+    
+    <select id="selectSysEmployeeByEmployeeId" parameterType="Long" resultMap="SysEmployeeResult">
+        <include refid="selectSysEmployeeVo"/>
+        where employee_id = #{employeeId}
+    </select>
+
+    <insert id="insertSysEmployee" parameterType="SysEmployee" useGeneratedKeys="true" keyProperty="employeeId">
+        insert into sys_employee
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="deptId != null">dept_id,</if>
+            <if test="employeeName != null and employeeName != ''">employee_name,</if>
+            <if test="phone != null">phone,</if>
+            <if test="email != null">email,</if>
+            <if test="post != null">post,</if>
+            <if test="salary != null">salary,</if>
+            <if test="entryDate != null">entry_date,</if>
+            <if test="status != null">status,</if>
+            <if test="avatar != null">avatar,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="deptId != null">#{deptId},</if>
+            <if test="employeeName != null and employeeName != ''">#{employeeName},</if>
+            <if test="phone != null">#{phone},</if>
+            <if test="email != null">#{email},</if>
+            <if test="post != null">#{post},</if>
+            <if test="salary != null">#{salary},</if>
+            <if test="entryDate != null">#{entryDate},</if>
+            <if test="status != null">#{status},</if>
+            <if test="avatar != null">#{avatar},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysEmployee" parameterType="SysEmployee">
+        update sys_employee
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="deptId != null">dept_id = #{deptId},</if>
+            <if test="employeeName != null and employeeName != ''">employee_name = #{employeeName},</if>
+            <if test="phone != null">phone = #{phone},</if>
+            <if test="email != null">email = #{email},</if>
+            <if test="post != null">post = #{post},</if>
+            <if test="salary != null">salary = #{salary},</if>
+            <if test="entryDate != null">entry_date = #{entryDate},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="avatar != null">avatar = #{avatar},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where employee_id = #{employeeId}
+    </update>
+
+    <delete id="deleteSysEmployeeByEmployeeId" parameterType="Long">
+        delete from sys_employee where employee_id = #{employeeId}
+    </delete>
+
+    <delete id="deleteSysEmployeeByEmployeeIds" parameterType="String">
+        delete from sys_employee where employee_id in 
+        <foreach item="employeeId" collection="array" open="(" separator="," close=")">
+            #{employeeId}
+        </foreach>
+    </delete>
+</mapper>
